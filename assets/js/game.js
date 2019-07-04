@@ -16,6 +16,7 @@ var answer = document.getElementById("answer");
 var lives = document.getElementById("lives");
 var resetDoc = document.getElementById("reset");
 var guessDoc = document.getElementById("guess");
+var jumbo = document.getElementById("jumbo");
 
 
 
@@ -25,13 +26,18 @@ function reset(){
   livescount = 10;
   ans = ansList[Math.floor(Math.random()*ansList.length)];
   wins = 0;
+  //clear arrays
+  guesses.length = 0;
+  displayAns.length = 0;
+  lettersGuessed.length = 0;
+  //repopulate lettersGuessed with falses
   for(var i = 0; i<ans.length; i++){
     lettersGuessed[i] = false;
   }
+  //repopulate displayAns with blanks
   for(var i = 0; i<ans.length; i++){
     displayAns[i] = '_';
   }
-  guesses.length = 0;
   game.textContent = "Press any key to start guessing";
   answer.textContent = "Movie Villain: "+ displayAns;
   lives.textContent = "Your Guesses: "+ livescount;
@@ -39,7 +45,11 @@ function reset(){
 }
 
 function youWin(){
-  debugger;
+  jumbo.src = "assets/images/"+ans+".jpg";
+  jumbo.style.display = "block";
+  jumbo.style.visibility = "visible";
+  game.textContent = "You Won! Press a key to keep going."
+
   guesses.length = 0;
   displayAns.length = 0;
   lettersGuessed.length = 0;
@@ -51,10 +61,6 @@ function youWin(){
   for(var i = 0; i<ans.length; i++){
     displayAns[i] = '_';
   }
-  game.textContent = "Wins: " + wins;
-  answer.textContent = "Movie Villain: "+ displayAns;
-  lives.textContent = "Your Guesses: "+ livescount;
-  guessDoc.textContent = "Wrong Guesses: "+ guesses;
 
 }
 
@@ -69,6 +75,7 @@ reset();
 // This function is run whenever the user presses a key.
 document.onkeyup = function (event) {
   //ends game when lives hits 0
+  jumbo.style.display = "none";
 if((livescount!==0)&&(!(guesses.includes(event.key)))){
   // Determines which key was pressed.
   var userGuess = event.key.toLowerCase();
@@ -96,7 +103,8 @@ if((livescount!==0)&&(!(guesses.includes(event.key)))){
     youWin();
   }
 }
-else{
+else if(livescount ===0)
+{
   game.innerHTML = "<h1>Too bad, Try again</h1><br>"+
                     "<h1>Click Reset to try again</h1>";
 }
